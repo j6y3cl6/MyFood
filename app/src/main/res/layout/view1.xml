@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/v1"
+    android:orientation="vertical"
     >
     <Button
         android:layout_width="wrap_content"
@@ -10,10 +11,16 @@
         android:onClick="TL"
         android:text="真懶"/>
     <Button
+        android:id="@+id/b1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="FL"
         android:text="假懶"
         />
+    <WebView
+        android:id="@+id/wv"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

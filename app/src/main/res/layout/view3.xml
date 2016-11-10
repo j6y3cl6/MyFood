@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/v3"
+    android:orientation="vertical"
     >
     <Button
         android:layout_width="wrap_content"
@@ -10,8 +11,12 @@
         android:text="新稱菜單"
 
         />
-<Spinner
+    <Spinner
     android:id="@+id/My_spinner"
+    android:visibility="gone"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>
