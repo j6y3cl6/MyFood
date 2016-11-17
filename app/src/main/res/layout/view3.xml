@@ -5,18 +5,123 @@
     android:background="@drawable/v3"
     android:orientation="vertical"
     >
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="新稱菜單"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
 
-        />
-    <Spinner
-    android:id="@+id/My_spinner"
-    android:visibility="gone"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="店名"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_weight="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="標籤"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_weight="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="地址"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                >
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/ETname"
+                        android:hint="請輸入..."
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="14sp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_weight="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/ETtag"
+                        android:hint="請輸入..."
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="14sp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_weight="5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/ETaddr"
+                        android:hint="請輸入..."
+                        android:gravity="center"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="14sp"
+
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <Button
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="新稱菜單"
+            android:onClick="InsertMeny"
+            />
+
+    </LinearLayout>
+
+
     <ListView
+        android:id="@+id/food_list"
+        android:layout_weight="10"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>
