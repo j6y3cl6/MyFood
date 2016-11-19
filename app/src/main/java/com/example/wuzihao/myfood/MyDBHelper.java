@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyDBHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "food.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private final static String creatTable =
             "CREATE TABLE foodMenu(name TEXT, tag TEXY,addr TEXT)";
 
@@ -24,11 +24,12 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(creatTable);
+
+        db.execSQL(creatTable)
+        ;
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 }

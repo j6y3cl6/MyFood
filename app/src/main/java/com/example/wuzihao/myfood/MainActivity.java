@@ -2,6 +2,7 @@ package com.example.wuzihao.myfood;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,13 +17,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewDebug;
+import android.view.ViewGroup;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -48,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
     private MyDBHelper helper;
     private SQLiteDatabase db;
     private ListView food_list;
+    private ArrayList NameList= new ArrayList();
+    private ArrayList TagList = new ArrayList();
+    private ArrayList AddrList = new ArrayList();
+    private listAdapter listAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         helper = new MyDBHelper(this);
         db = helper.getWritableDatabase();
+
 
 
 
@@ -113,7 +124,29 @@ public class MainActivity extends AppCompatActivity {
         ET = (EditText)view3.findViewById(R.id.ETtag);
         EA = (EditText)view3.findViewById(R.id.ETaddr);
 
+        listAdapter=new listAdapter(this);
+
         food_list = (ListView)view3.findViewById(R.id.food_list);
+        food_list.setAdapter(listAdapter);
+
+        food_list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                remove(position);
+                return true;
+            }
+        });
+
+
+
+        ShowMenu();
+    }
+
+    private void remove(int position) {
+        db.execSQL("DELETE FROM foodMenu where name='"+NameList.get(position)+"'");
+        NameList.remove(position);
+        TagList.remove(position);
+        AddrList.remove(position);
         ShowMenu();
     }
 
@@ -125,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void TL(View V){
+
         webView.loadUrl("https://www.google.com.tw/maps/search/吃/@"+lat+","+lng+",16z");
         Toast.makeText(this,"真懶",Toast.LENGTH_SHORT).show();
     }
@@ -161,6 +195,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void ShowMenu(){
 
+        NameList.clear();
+        TagList.clear();
+        AddrList.clear();
 
         Cursor c = db.query("foodMenu",null,null,null,null,null,null);
         c.moveToFirst();
@@ -168,22 +205,94 @@ public class MainActivity extends AppCompatActivity {
             String name = c.getString(c.getColumnIndex("name"));
             String tag = c.getString(c.getColumnIndex("tag"));
             String addr = c.getString(c.getColumnIndex("addr"));
+
+            NameList.add(name);
+            TagList.add(tag);
+            AddrList.add(addr);
+
         }
+
+        listAdapter.notifyDataSetChanged();
+
+
     }
 
     public void InsertMeny(View V){
-        MyFoodMenu myFoodMenu = new MyFoodMenu(
-                EN.getText().toString(),
-                ET.getText().toString(),
-                EA.getText().toString());
-
-        ContentValues values= new ContentValues();
-        values.put("name",myFoodMenu.getName());
-        values.put("tag",myFoodMenu.getTag());
-        values.put("addr",myFoodMenu.getAddr());
-        db.insert("foodMenu",null,values);
-
         ShowMenu();
+        boolean b = false;
+
+        Cursor c = db.query("foodMenu",null,"name = ?",new String[]{EN.getText().toString()},null,null,null);
+        c.moveToFirst();
+        if (c.getCount()>0) {
+
+            Log.v("How",String.valueOf(c.getCount()));
+            b=true;
+        }
+
+
+        if (EN.getText().toString().equals("")) {
+            Toast.makeText(this,"至少給個名字吧...",Toast.LENGTH_SHORT).show();
+        }else if(b){
+            Toast.makeText(this,"已有重複之店名",Toast.LENGTH_SHORT).show();
+
+        } else{
+
+            MyFoodMenu myFoodMenu = new MyFoodMenu(
+                    EN.getText().toString(),
+                    ET.getText().toString(),
+                    EA.getText().toString());
+
+            ContentValues values= new ContentValues();
+            values.put("name",myFoodMenu.getName());
+            values.put("tag",myFoodMenu.getTag());
+            values.put("addr",myFoodMenu.getAddr());
+            db.insert("foodMenu",null,values);
+
+            ShowMenu();
+            EN.setText("");
+            ET.setText("");
+            EA.setText("");
+        }
+    }
+
+    public class listAdapter extends BaseAdapter{
+        private LayoutInflater myInflater;
+
+        public listAdapter(Context c){
+            myInflater = LayoutInflater.from(c);
+
+        }
+
+        @Override
+        public int getCount() {
+            return NameList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return NameList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            convertView = myInflater.inflate(R.layout.list_view,null);
+
+            TextView name=(TextView)convertView.findViewById(R.id.TVname);
+            TextView tag=(TextView)convertView.findViewById(R.id.TVtag);
+            TextView addr=(TextView)convertView.findViewById(R.id.TVaddr);
+
+
+            name.setText((String)NameList.get(position));
+            tag.setText((String)TagList.get(position));
+            addr.setText((String)AddrList.get(position));
+
+            return convertView;
+        }
     }
 
 }
